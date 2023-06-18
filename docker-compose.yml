@@ -14,7 +14,7 @@ services:
 
   note_db:
     container_name: note_db
-    image: postgres:12
+    image: postgres:12-alpine
     ports:
       - "5432:5432"
     environment:

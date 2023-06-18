@@ -6,5 +6,3 @@ class NoteModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
-    tags = db.relationship("TagModel", back_populate="tasks",
-                           secondary="tasks_tags")
