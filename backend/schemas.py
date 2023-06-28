@@ -1,12 +1,13 @@
 from marshmallow import Schema, fields
+from sqlalchemy.orm.strategy_options import load_only
 
 
 class PlainNoteSchema(Schema):
-    id = fields.Str(dump_only=True)
+    id = fields.Int(dump_only=True)
     title = fields.Str(required=True)
     note = fields.Str(required=False)
     created_date = fields.DateTime()
-    update_date = fields.DateTime()
+    updated_date = fields.DateTime()
 
 
 class PlainTagSchema(Schema):
@@ -14,9 +15,22 @@ class PlainTagSchema(Schema):
     name = fields.Str()
 
 
+class PlainNoteUpdateSchema(Schema):
+    title = fields.Str(required=True)
+    notes = fields.Str(required=False)
+    updated_date = fields.DateTime()
+
+
 class NoteSchema(PlainNoteSchema):
-    tags = fields.List(fields.Nested(PlainTagSchema()), dump_only=True)
+    tags = fields.List(fields.Nested(PlainTagSchema()))
 
 
-class TagSchema(PlainNoteSchema):
-    notes = fields.List(fields.Nested(PlainNoteSchema()), dump_only=True)
+class TagSchema(PlainTagSchema):
+    note_id = fields.Int(load_only=True)
+    note = fields.Nested(PlainNoteSchema(), dump_only=True)
+
+
+class TagAndNoteSchema(Schema):
+    message = fields.Str()
+    note = fields.Nested(NoteSchema)
+    tag = fields.Nested(TagSchema)
