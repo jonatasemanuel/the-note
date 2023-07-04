@@ -1,5 +1,4 @@
 from marshmallow import Schema, fields
-from sqlalchemy.orm.strategy_options import load_only
 
 
 class PlainNoteSchema(Schema):
@@ -27,7 +26,7 @@ class NoteSchema(PlainNoteSchema):
 
 class TagSchema(PlainTagSchema):
     note_id = fields.Int(load_only=True)
-    note = fields.Nested(PlainNoteSchema(), dump_only=True)
+    notes = fields.List(fields.Nested(PlainNoteSchema()))
 
 
 class TagAndNoteSchema(Schema):
